@@ -22,6 +22,18 @@
           <form:errors path="porcentaje" cssClass="error"/>
         </td>
     </tr>
+    <tr>
+    	<td>
+    		<form:checkbox path="confirmar"/>
+    		¿Estas Seguro?
+    	</td>
+    	<td>
+    		<form:errors  path="confirmar" cssClass="error"/>
+    	</td>    	
+    </tr>
+        
+    <form:errors></form:errors>
+        
   </table>
   <br>
   <input type="submit" align="center" value="Ejecutar">
