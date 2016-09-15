@@ -32,8 +32,6 @@
     	</td>    	
     </tr>
         
-    <form:errors></form:errors>
-        
   </table>
   <br>
   <input type="submit" align="center" value="Ejecutar">
