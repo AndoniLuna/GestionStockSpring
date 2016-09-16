@@ -6,8 +6,17 @@ public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private long id;
 	private String description;
 	private Double price;
+
+	public long getId() {
+		return this.id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getDescription() {
 		return this.description;

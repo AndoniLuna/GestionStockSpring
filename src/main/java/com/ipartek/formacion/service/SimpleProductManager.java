@@ -2,11 +2,19 @@ package com.ipartek.formacion.service;
 
 import java.util.List;
 
-import com.ipartek.formacion.domain.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.ipartek.formacion.domain.Product;
+import com.ipartek.formacion.repository.InventarioDAO;
+
+@Service("productManager")
 public class SimpleProductManager implements ProductManager {
 
 	private static final long serialVersionUID = 1L;
+
+	@Autowired
+	private InventarioDAO inventarioDAOImpl;
 
 	private List<Product> products;
 
@@ -31,11 +39,8 @@ public class SimpleProductManager implements ProductManager {
 
 	@Override
 	public List<Product> getProducts() {
+		this.products = this.inventarioDAOImpl.getProducts();
 		return this.products;
-	}
-
-	public void setProducts(List<Product> products) {
-		this.products = products;
 	}
 
 }
