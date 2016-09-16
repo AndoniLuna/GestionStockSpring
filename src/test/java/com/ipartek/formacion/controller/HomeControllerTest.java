@@ -14,7 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 public class HomeControllerTest {
-
+/*
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -56,5 +56,5 @@ public class HomeControllerTest {
 		}
 
 	}
-
+*/
 }

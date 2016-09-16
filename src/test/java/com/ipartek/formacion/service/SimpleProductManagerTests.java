@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.ipartek.formacion.domain.Product;
 
 public class SimpleProductManagerTests {
-
+	/*
 	private SimpleProductManager productManager;
 
 	private List<Product> products;
@@ -116,5 +116,5 @@ public class SimpleProductManagerTests {
 	public void testIncreasePriceWithIlegalArgumentOver() {
 		this.productManager.increasePrice(OVER_PRICE_INCREASE);
 	}
-
+*/
 }

@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,25 +46,27 @@ public class PersonaController {
 		return new ModelAndView("persona", model);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	public String onSubmit(@Valid Persona persona, BindingResult result) {
+	@RequestMapping(value="/insert-persona.html", method = RequestMethod.POST)
+	public String insert(@Valid Persona persona, BindingResult result) {
 		// Si hay errores volver pagina priceincrease.jsp
 		if (result.hasErrors()) {
-			return "insert-persona.html";
+			return "insert-persona";
+		}else{
+			logger.info("Persona insertada");
 		}
-		this.logger.info("Mostrando personas: "+persona);
-		this.personaManager.getAll();
-		return "redirect:/insert-persona.html";
+		//this.logger.info("Mostrando personas: "+persona.toString());
+		//this.personaManager.getAll();
+		return "redirect:persona";
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	protected Persona populateForm(HttpServletRequest request) throws ServletException {
-		this.logger.debug("Rellando formulario antes de mostrar");
-		final Persona persona = new Persona();
-		persona.setEdad(0);
-		persona.setNombre("");
-		return persona;
+	@RequestMapping(value="/insert-persona.html", method = RequestMethod.GET)
+	public String preView(Model model){
+		logger.info("Antes de cargar insert-persona");
+		Persona persona = new Persona();
+		persona.setEdad(18);
+		model.addAttribute("persona", persona);
+		return "insert-persona";
 	}
-	
+
 
 }

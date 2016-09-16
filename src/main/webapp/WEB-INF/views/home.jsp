@@ -11,6 +11,7 @@
 	<li><a href="inventario">Ver inventario</a></li>
 	<li><a href="persona">Ver Personas</a></li>
 	<li><a href="<c:url value="incremento-precio.html"/>">Incrementar Precio</a></li>
+	<li><a href="<c:url value="insert-persona.html"/>">Insertar persona</a></li>
 </ol>
 
 <P>  The time on the server is ${serverTime}. </P>
