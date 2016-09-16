@@ -7,8 +7,6 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ipartek.formacion.service.SimpleProductManager;
-
 public class InventoryControllerTest {
 
 	@Test
@@ -16,9 +14,9 @@ public class InventoryControllerTest {
 		try {
 
 			final InventoryController controller = new InventoryController();
-			controller.setProductManager(new SimpleProductManager());
+			// controller.setProductManager(new SimpleProductManager());
 
-			final ModelAndView mv = controller.handleRequest(null, null);
+			final ModelAndView mv = controller.listarInventario(null, null);
 
 			assertEquals("Vista NO valida", "inventario", mv.getViewName());
 			assertNotNull(mv.getModel().get("fecha"));
