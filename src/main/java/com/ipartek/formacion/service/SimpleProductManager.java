@@ -2,14 +2,21 @@ package com.ipartek.formacion.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.ipartek.formacion.domain.Product;
 
+
+
+@Component
 public class SimpleProductManager implements ProductManager {
 
 	private static final long serialVersionUID = 1L;
 
 	private List<Product> products;
-
+	
+	
+	
 	@Override
 	public void increasePrice(int percentage) throws IllegalArgumentException {
 

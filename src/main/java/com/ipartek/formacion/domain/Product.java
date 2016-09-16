@@ -2,11 +2,36 @@ package com.ipartek.formacion.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "products")
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	@Column(name = "description")
 	private String description;
+	
+	@Column(name = "price")
 	private Double price;
 
 	public String getDescription() {
@@ -27,7 +52,9 @@ public class Product implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [description=" + this.description + ", price=" + this.price + "]";
+		return "Product [id=" + id + ", description=" + description + ", price=" + price + "]";
 	}
+
+	
 
 }
