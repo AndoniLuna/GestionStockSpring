@@ -8,6 +8,7 @@
     <h3>Productos</h3>
     <c:forEach items="${products}" var="prod">
       <c:out value="${prod.description}"/> <i>$<c:out value="${prod.price}"/></i><br><br>
-    </c:forEach>
+    </c:forEach>    
+	<a href="<c:url value="/"/>">Home</a>
   </body>
 </html>

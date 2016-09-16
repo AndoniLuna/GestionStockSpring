@@ -25,11 +25,12 @@ public class SimpleProductManager implements ProductManager {
 			throw new IllegalArgumentException(MSG_ILLEGALARGUMENT_EXCEPTION);
 
 		} else {
-			if (this.products != null) {
+			if (this.products != null) {				
 				for (final Product product : this.products) {
 					if (product != null) {
+						final long id = product.getId();
 						final double newPrice = product.getPrice().doubleValue() * (100 + percentage) / 100;
-						product.setPrice(newPrice);
+						this.inventarioDAOImpl.increasePrice(id, newPrice);
 					}
 				}
 			}

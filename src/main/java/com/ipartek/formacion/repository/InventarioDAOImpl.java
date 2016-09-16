@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,15 +23,20 @@ public class InventarioDAOImpl implements InventarioDAO {
 
 	private JdbcTemplate jdbctemplate;
 
+	@Autowired
+	private DataSource datasource;
+	
+	@Autowired
 	@Override
 	public void setDataSource(DataSource dataSource) {
-		this.jdbctemplate = new JdbcTemplate(dataSource);
+		this.datasource = dataSource;
+		this.jdbctemplate = new JdbcTemplate(this.datasource);
 	}
 
 	@Override
-	public void increasePrice(int percentage) {
-		// TODO Auto-generated method stub
-
+	public void increasePrice(long id, double newPrice) {
+		final String SQL = "UPDATE products SET price = ? WHERE id = ?;";
+		this.jdbctemplate.update(SQL, newPrice, id);
 	}
 
 	@Override

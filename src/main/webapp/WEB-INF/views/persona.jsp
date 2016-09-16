@@ -9,5 +9,6 @@
     <c:forEach items="${personas}" var="persona">
       <c:out value="${persona.nombre}"/> <br><br>
     </c:forEach>
+	<a href="<c:url value="/"/>">Home</a>
   </body>
 </html>

@@ -9,7 +9,7 @@
 		<property name="location" value="classpath:/database.properties" />
 	</bean>
 	
-	<bean name="mysqlDataSource"
+	<bean name="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${mysql.driver}" />
 		<property name="url" value="${mysql.url}" />

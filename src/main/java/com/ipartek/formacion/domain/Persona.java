@@ -10,7 +10,9 @@ import javax.validation.constraints.Size;
 public class Persona implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private long id;
+	
 	@NotNull
 	@Size(min = 3, max = 199)
 	private String nombre;
@@ -18,6 +20,14 @@ public class Persona implements Serializable {
 	@Min(0)
 	@Max(199)
 	private int edad;
+
+	public long getId() {
+		return this.id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public int getEdad() {
 		return this.edad;

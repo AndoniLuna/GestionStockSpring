@@ -27,6 +27,7 @@
 		
 	</form:form>
 
+<a href="<c:url value="/"/>">Home</a>
 
 </body>
 </html>
