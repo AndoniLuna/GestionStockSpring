@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,11 +21,15 @@ public class InventarioDAOImpl implements InventarioDAO {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LoggerFactory.getLogger(InventarioDAOImpl.class);
 
+	@Autowired
+	private DataSource dataSource;
 	private JdbcTemplate jdbctemplate;
 
+	@Autowired
 	@Override
 	public void setDataSource(DataSource dataSource) {
-		this.jdbctemplate = new JdbcTemplate(dataSource);
+		this.dataSource = dataSource;
+		this.jdbctemplate = new JdbcTemplate(this.dataSource);
 	}
 
 	@Override
