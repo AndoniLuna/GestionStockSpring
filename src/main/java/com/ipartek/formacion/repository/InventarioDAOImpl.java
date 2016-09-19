@@ -91,47 +91,67 @@ public class InventarioDAOImpl implements InventarioDAO {
 		return resul;
 	}
 
-	@Override
-	public boolean insertar(final Product product) {
-		boolean resul = false;
-		int affectedRows = -1;
+	// @Override
+	// public boolean insertar(final Product product) {
+	// boolean resul = false;
+	// int affectedRows = -1;
+	//
+	// // insert
+	// if (-1 == product.getId()) {
+	//
+	// final KeyHolder keyHolder = new GeneratedKeyHolder();
+	// final String sqlInsert = "INSERT INTO `products` ( `id`, `description`,
+	// `price`) VALUES ( ? , ? , ? );";
+	// affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
+	// @Override
+	// public PreparedStatement createPreparedStatement(Connection conn) throws
+	// SQLException {
+	// final PreparedStatement ps = conn.prepareStatement(sqlInsert);
+	// ps.setLong(1, product.getId());
+	// ps.setString(2, product.getDescription());
+	// ps.setDouble(3, product.getPrice());
+	// return ps;
+	// }
+	//
+	// }, keyHolder);
+	//
+	// product.setId(keyHolder.getKey().longValue());
+	//
+	// // modificar
+	// } else {
+	// final String sqlInsert = "UPDATE `products` SET `id`=?, `description`=?,
+	// `price`=? WHERE `id`= ?;";
+	// final Object[] args = { product.getId(), product.getDescription(),
+	// product.getPrice(), product.getId() };
+	// affectedRows = this.jdbctemplate.update(sqlInsert, args);
+	// }
+	//
+	// if (affectedRows == 1) {
+	// resul = true;
+	// }
+	// return resul;
+	// }
+	//
+	// @Override
+	// public boolean modificar(Product p) {
+	// // TODO Auto-generated method stub
+	// return false;
+	// }
+	public void saveProduct(Product product) {
 
-		// insert
-		if (-1 == product.getId()) {
+		String sql = "INSERT INTO products (description, price)" + " VALUES (?, ?)";
+		jdbctemplate.update(sql, product.getDescription(), product.getPrice());
 
-			final KeyHolder keyHolder = new GeneratedKeyHolder();
-			final String sqlInsert = "INSERT INTO `products` ( `id`, `description`, `price`) VALUES ( ? , ? , ? );";
-			affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
-				@Override
-				public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
-					final PreparedStatement ps = conn.prepareStatement(sqlInsert);
-					ps.setLong(1, product.getId());
-					ps.setString(2, product.getDescription());
-					ps.setDouble(3, product.getPrice());
-					return ps;
-				}
-
-			}, keyHolder);
-
-			product.setId(keyHolder.getKey().longValue());
-
-			// modificar
-		} else {
-			final String sqlInsert = "UPDATE `products` SET `id`=?, `description`=?, `price`=? WHERE  `id`= ?;";
-			final Object[] args = { product.getId(), product.getDescription(), product.getPrice(), product.getId() };
-			affectedRows = this.jdbctemplate.update(sqlInsert, args);
-		}
-
-		if (affectedRows == 1) {
-			resul = true;
-		}
-		return resul;
 	}
 
 	@Override
-	public boolean modificar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public void updateProduct(Product product) {
+		if (product.getId() > 0) {
+			// update
+			String sql = "UPDATE products SET description=?, price=? WHERE id=?";
+			jdbctemplate.update(sql, product.getDescription(), product.getPrice(), product.getId());
 
+		}
+
+	}
 }
