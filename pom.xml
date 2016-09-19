@@ -12,6 +12,7 @@
 		<org.springframework-version>4.3.2.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<mysql.version>5.1.38</mysql.version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -32,6 +33,13 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-jdbc</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		
 				
 		<!-- AspectJ -->
 		<dependency>
@@ -122,6 +130,12 @@
 		    <version>5.2.4.Final</version>
 		</dependency>
 		
+		<!-- mysql -->
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>${mysql.version}</version>
+		</dependency>
 	
 		<!-- Test -->
 		<dependency>

@@ -37,7 +37,7 @@
   <input type="submit" align="center" value="Ejecutar">
 </form:form>
 
-<a href="<c:url value=""/>">Home</a>
+<a href="<c:url value="/"/>">Home</a>
 
 </body>
 </html>

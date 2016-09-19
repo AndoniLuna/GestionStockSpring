@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ipartek.formacion.service.ProductManager;
@@ -26,12 +27,19 @@ public class InventoryController {
 	@Autowired
 	private ProductManager productManager;
 
-	public void setProductManager(ProductManager productManager) {
-		this.productManager = productManager;
-	}
-
-	@RequestMapping(value = "/inventario")
-	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
+	/**
+	 *
+	 * Mostrar Listado de todos los productos de Inventario
+	 *
+	 * @param request
+	 * @param response
+	 * @return ModelAndView view: "inventario.jsp", model:{ArrayList
+	 *         <Product> "products", String "fecha"}
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/inventario", method = RequestMethod.GET)
+	public ModelAndView listarInventario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		this.logger.info("procesando peticion");
@@ -41,7 +49,7 @@ public class InventoryController {
 		model.put("products", this.productManager.getProducts());
 		model.put("fecha", new Date().toString());
 
-		return new ModelAndView("inventario", model);
+		return new ModelAndView("product/inventario", model);
 	}
 
 }
