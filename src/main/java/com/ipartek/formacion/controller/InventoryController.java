@@ -48,7 +48,7 @@ public class InventoryController {
 		model.put("products", this.productManager.getProducts());
 		model.put("fecha", new Date().toString());
 
-		return new ModelAndView("inventario", model);
+		return new ModelAndView("product/inventario", model);
 	}
 
 }
