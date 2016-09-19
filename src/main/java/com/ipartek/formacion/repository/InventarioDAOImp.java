@@ -18,13 +18,13 @@ import org.springframework.stereotype.Repository;
 
 import com.ipartek.formacion.domain.Product;
 import com.ipartek.formacion.repository.mapper.ProductMapper;
+import com.mysql.jdbc.PreparedStatement;
 
 @Repository("inventarioDAOImp")
 public class InventarioDAOImp implements InventarioDAO {
 
-	private static final Logger logger = LoggerFactory.getLogger(InventarioDAOImp.class);
-
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = LoggerFactory.getLogger(InventarioDAOImp.class);
 
 	@Autowired
 	private DataSource dataSource = null;
@@ -40,7 +40,7 @@ public class InventarioDAOImp implements InventarioDAO {
 
 	@Override
 	public void increasePrice(int percentage) {
-		// TODO Auto-generated method stub
+		// TODO CallableStatement con procedimiento almacenado en BBDD
 
 	}
 
@@ -63,15 +63,72 @@ public class InventarioDAOImp implements InventarioDAO {
 	// ***********************************
 	// * insertar nuevo producto en BBDD *
 	// ***********************************
+	/*
+	 * @Override public boolean insert(Product p) {
+	 * 
+	 * if (-1 == p.getId()) {
+	 * 
+	 * final KeyHolder keyHolder = new GeneratedKeyHolder(); final String sql =
+	 * "INSERT INTO `products` (`description`, `price`) VALUES ( ? , ? );";
+	 * 
+	 * affectedRows = this.jdbcTemplateObject.update(new
+	 * PreparedStatementCreator() {
+	 * 
+	 * @Override public PreparedStatement createPreparedStatement(Connection
+	 * conn) throws SQLException { final PreparedStatement ps =
+	 * conn.prepareStatement(sqlInsert); ps.setString(1, p.getDescription());
+	 * ps.setString(2, p.getPrice());
+	 * 
+	 * return ps; } }, keyHolder);
+	 * 
+	 * p.setId(keyHolder.getKey().longValue());
+	 * 
+	 * return false; } }
+	 */
 
 	@Override
-	public boolean insert(Product p) {
+	public Product getById(long id) {
+		Product p = null;
+		// TODO cambiar por PreparedStatement
+		final String SQL = "SELECT id, description, price FROM products WHERE id=" + id;
 
-		if (-1 == p.getId()) {
+		try {
+			p = this.jdbctemplate.queryForObject(SQL, new ProductMapper());
+
+		} catch (EmptyResultDataAccessException e) {
+			logger.warn("No existen productos con ID=" + id);
+			p = null;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			p = null;
+		}
+		return p;
+	}
+
+	@Override
+	public boolean eliminar(long id) {
+		boolean resul = false;
+		// TODO preparedStatement
+		final String SQL = "DELETE FROM `products` WHERE  `id`=" + id;
+
+		if (1 == this.jdbctemplate.update(SQL)) {
+			resul = true;
+		}
+
+		return resul;
+	}
+
+	@Override
+	public boolean insertar(Product p) {
+		boolean result = false;
+		int affectedRows = -1;
+
+		// comprobar el ultimo id de la BBDD
+
+		if (0 == p.getId()) {
 
 			final KeyHolder keyHolder = new GeneratedKeyHolder();
-			final String sql = "INSERT INTO `products` (`description`, `price`) VALUES ( ? , ? );";
-
+			final String sqlInsert = "INSERT INTO `productos` ( `description`, `price`) VALUES ( ? , ? );";
 			affectedRows = this.jdbcTemplateObject.update(new PreparedStatementCreator() {
 				@Override
 				public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
@@ -84,9 +141,14 @@ public class InventarioDAOImp implements InventarioDAO {
 			}, keyHolder);
 
 			p.setId(keyHolder.getKey().longValue());
-
-			return false;
 		}
+		return true;
+	}
+
+	@Override
+	public boolean modificar(Product p) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

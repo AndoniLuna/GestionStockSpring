@@ -43,8 +43,26 @@ public class SimpleProductManager implements ProductManager {
 		return this.products;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	@Override
+	public Product getById(long id) {
+		return this.inventarioDAOImp.getById(id);
+	}
+
+	@Override
+	public boolean eliminar(long id) {
+		return this.inventarioDAOImp.eliminar(id);
+	}
+
+	@Override
+	public boolean insertar(Product p) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean modificar(Product p) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
