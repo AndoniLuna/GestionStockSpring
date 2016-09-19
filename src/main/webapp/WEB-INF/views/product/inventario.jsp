@@ -8,14 +8,24 @@
    
     <hr>
     	<ol>
-    		<li><a href="<c:url value="incremento-precio.html"/>">Incrementar Precio</a></li>
-    		<li><a href="<c:url value="inventario/nuevo"/>">Nuevo</a></li>
+    		<li><a href="incremento-precio.html">Incrementar Precio</a></li>
+    		<li><a href="inventario/nuevo">Nuevo</a></li>
     	</ol>	
     <hr>
    
+    ${msg}
+   
     <h2>Productos</h2> 
     <c:forEach items="${products}" var="prod">
-      <c:out value="${prod.description}"/> <i>$<c:out value="${prod.price}"/></i><br><br>
+    	<a href="inventario/detalle/${prod.id}">
+      		<c:out value="${prod.description}"/> 
+      		<i>$<c:out value="${prod.price}"/></i>
+      	</a>
+      	<a href="inventario/eliminar/${prod.id}">
+      		[X]
+      	</a>      
+      	      
+      <br><br>
     </c:forEach>
   </body>
 </html>

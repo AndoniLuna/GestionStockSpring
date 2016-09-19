@@ -9,6 +9,9 @@
   </style>  
 </head>
 <body>
+
+<a href="inventario"> &lt;&lt; Volver Inventario</a>
+<br>
 <h1>Crear Producto</h1>
 
 <form:form action="nuevo" method="post" commandName="product">
