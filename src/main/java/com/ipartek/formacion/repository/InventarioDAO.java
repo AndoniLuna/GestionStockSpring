@@ -13,6 +13,14 @@ public interface InventarioDAO extends Serializable {
 
 	List<Product> getProducts();
 
+	Product getById(long id);
+
+	boolean eliminar(long id);
+
+	boolean insertar(Product p);
+
+	boolean modificar(Product p);
+
 	void setDataSource(DataSource dataSource);
 
 }

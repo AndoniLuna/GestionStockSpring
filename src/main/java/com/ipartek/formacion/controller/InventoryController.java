@@ -89,9 +89,8 @@ public class InventoryController {
 		this.logger.trace("Mostrando detalle producto[" + id + "]....");
 
 		Map<String, Object> model = new HashMap<String, Object>();
-		Product p = new Product();
-		p.setDescription("Detalle producto");
-		model.put("product", p);
+
+		model.put("product", this.productManager.getById(id));
 
 		return new ModelAndView("product/form", model);
 	}
