@@ -34,7 +34,7 @@ public class InventarioDAOImpl implements InventarioDAO {
 
 	@Override
 	public void increasePrice(int percentage) {
-		// TODO Auto-generated method stub
+		// TODO CallableStatement con procedimiento almacenado en BBDD
 
 	}
 
@@ -76,8 +76,15 @@ public class InventarioDAOImpl implements InventarioDAO {
 
 	@Override
 	public boolean eliminar(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+		// TODO preparedStatement
+		final String SQL = "DELETE FROM `products` WHERE  `id`=" + id;
+
+		if (1 == this.jdbctemplate.update(SQL)) {
+			resul = true;
+		}
+
+		return resul;
 	}
 
 	@Override

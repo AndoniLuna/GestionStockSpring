@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -42,8 +40,7 @@ public class InventoryController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/inventario", method = RequestMethod.GET)
-	public ModelAndView listarInventario(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public ModelAndView listarInventario() throws ServletException, IOException {
 
 		this.logger.info("procesando peticion");
 
@@ -96,14 +93,22 @@ public class InventoryController {
 	}
 
 	@RequestMapping(value = "/inventario/eliminar/{id}", method = RequestMethod.GET)
-	public ModelAndView eliminar(@PathVariable(value = "id") final long id) {
+	public void eliminar(@PathVariable(value = "id") final long id) throws ServletException, IOException {
 		this.logger.trace("Eliminando producto[" + id + "]....");
 
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("products", this.productManager.getProducts());
-		model.put("msg", "Elimando producto[" + id + "]");
+		String msg = "No eliminado producto[" + id + "]";
+		if (this.productManager.eliminar(id)) {
+			msg = "producto[" + id + "] eliminado";
+			this.logger.info(msg);
+		} else {
+			this.logger.warn(msg);
+		}
+		model.put("msg", msg);
 
-		return new ModelAndView("product/inventario", model);
+		listarInventario();
+
+		// return new ModelAndView("product/inventario", model);
 	}
 
 }

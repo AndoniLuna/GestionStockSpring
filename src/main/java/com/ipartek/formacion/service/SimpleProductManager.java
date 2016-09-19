@@ -50,8 +50,7 @@ public class SimpleProductManager implements ProductManager {
 
 	@Override
 	public boolean eliminar(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.inventarioDAOImpl.eliminar(id);
 	}
 
 	@Override
