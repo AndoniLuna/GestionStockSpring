@@ -14,11 +14,18 @@ public class Product implements Serializable {
 	private long id;
 
 	@NotNull
-	@Size(min = 3, max = 199)
+	@Size(min = 3, max = 255)
 	private String description;
 
 	@Min(0)
 	private Double price;
+
+	public Product() {
+		super();
+		this.id = 0;
+		this.description = "";
+		this.price = 0.0;
+	}
 
 	public Long getId() {
 		return this.id;

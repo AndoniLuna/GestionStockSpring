@@ -9,13 +9,14 @@
     
     <hr>
 	    <ol>
+	    	<li><a href="<c:url value="/"/>">Inicio</a></li>
 	    	<li><a href="<c:url value="incremento-precio.html"/>">Incrementar Precio</a></li>
-	    	<li>Crear nuevo Producto</li>
+	    	<li><a href="<c:url value="inventario/nuevo"/>">Crear nuevo Producto</a></li>
 	    </ol>
     <hr>
     
     <c:forEach items="${products}" var="prod">
-      <c:out value="${prod.description}"/> <i>$<c:out value="${prod.price}"/></i><br><br>
+      <c:out value="${prod.description}"/> <i>$<c:out value="${prod.price}"/></i><button>Borrar</button><br><br>
     </c:forEach>
   </body>
 </html>
