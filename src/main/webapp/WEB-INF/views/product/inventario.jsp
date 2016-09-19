@@ -15,7 +15,7 @@
 	    </ol>
     <hr>
     
-    ${msg}
+    ${msg}<br />
     <c:forEach items="${products}" var="prod">
       <c:out value="${prod.description}"/> <i>$<c:out value="${prod.price}"/></i>&nbsp;&nbsp;<a href="<c:url value="inventario/detalle/${prod.id}"/>">Ver Detalle</a>&nbsp;&nbsp;<a href="<c:url value="inventario/borrar/${prod.id}"/>">Borrar</a><br><br>
     </c:forEach>

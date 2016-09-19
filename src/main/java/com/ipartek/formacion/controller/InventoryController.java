@@ -94,9 +94,9 @@ public class InventoryController {
 		this.logger.trace("Mostrar detalle del producto");
 
 		final Map<String, Object> model = new HashMap<String, Object>();
-		Product p = new Product();
-		p.setDescription("Detalle producto [" + id + "]...");
-		model.put("product", p);
+
+		model.put("product", this.productManager.getById(id));
+
 		return new ModelAndView("product/form", model);
 	}
 
@@ -111,6 +111,9 @@ public class InventoryController {
 
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put("msg", "Eliminando producto [" + id + "]...");
+		// Recargo los productos y la fecha
+		model.put("products", this.productManager.getProducts());
+		model.put("fecha", new Date().toString());
 
 		return new ModelAndView("product/inventario", model);
 	}

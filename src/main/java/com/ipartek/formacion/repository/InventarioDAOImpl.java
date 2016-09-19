@@ -56,4 +56,41 @@ public class InventarioDAOImpl implements InventarioDAO {
 		return lista;
 	}
 
+	@Override
+	public Product getById(long id) {
+		Product p = null;
+		// TODO cambiar por PreparedStatement
+		final String SQL = "SELECT id,description,price FROM products where id=" + id;
+
+		try {
+			p = this.jdbctemplate.queryForObject(SQL, new ProductMapper());
+
+		} catch (EmptyResultDataAccessException e) {
+			logger.warn("No existen productos con ID=" + id);
+			p = null;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			p = null;
+		}
+		return p;
+	}
+
+	@Override
+	public boolean eliminar(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean insertar(Product p) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean modificar(Product p) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
