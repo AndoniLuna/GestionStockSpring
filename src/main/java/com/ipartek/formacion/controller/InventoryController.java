@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -81,5 +82,36 @@ public class InventoryController {
 		model.put("product", new Product());
 
 		return new ModelAndView("product/form", model);
+	}
+
+	/**
+	 * Muestre el detalle del producto
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/inventario/detalle/{id}", method = RequestMethod.GET)
+	public ModelAndView mostrarDetalle(@PathVariable(value = "id") final long id) {
+		this.logger.trace("Mostrar detalle del producto");
+
+		final Map<String, Object> model = new HashMap<String, Object>();
+		Product p = new Product();
+		p.setDescription("Detalle producto [" + id + "]...");
+		model.put("product", p);
+		return new ModelAndView("product/form", model);
+	}
+
+	/**
+	 * Borrar el producto
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/inventario/borrar/{id}", method = RequestMethod.GET)
+	public ModelAndView borrarProducto(@PathVariable(value = "id") final long id) {
+		this.logger.trace("Borrar el producto");
+
+		final Map<String, Object> model = new HashMap<String, Object>();
+		model.put("msg", "Eliminando producto [" + id + "]...");
+
+		return new ModelAndView("product/inventario", model);
 	}
 }

@@ -31,7 +31,7 @@
   <input type="submit" align="center" value="Crear">
 </form:form>
 
-<a href="<c:url value="/inventario"/>">Atrás</a>
+<a href="<c:url value="/inventario"/>">&gt;&gt;Inventario</a>
 
 </body>
 </html>
