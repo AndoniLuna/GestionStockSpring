@@ -9,7 +9,7 @@
     <hr>
     	<ol>
     		<li><a href="<c:url value="incremento-precio.html"/>">Incrementar Precio</a></li>
-    		<li>CREAR NUEVO</li>
+    		<li><a href="<c:url value="inventario/nuevo"/>">Nuevo</a></li>
     	</ol>	
     <hr>
    
