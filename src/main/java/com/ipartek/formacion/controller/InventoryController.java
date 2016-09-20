@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -43,8 +41,7 @@ public class InventoryController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/inventario", method = RequestMethod.GET)
-	public ModelAndView listarInventario(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public ModelAndView listarInventario() throws ServletException, IOException {
 
 		this.logger.info("procesando peticion");
 
@@ -70,16 +67,16 @@ public class InventoryController {
 		return new ModelAndView("product/form", model);
 	}
 
-	@RequestMapping(value = "/inventario/nuevo", method = RequestMethod.POST)
+	@RequestMapping(value = "/inventario/nuevo/{product}", method = RequestMethod.POST)
 	public ModelAndView crear(@Valid Product product, BindingResult bindingResult) {
-		this.logger.trace("Creando producto...");
+		this.logger.trace("Creando producto....");
 
 		if (bindingResult.hasErrors()) {
-			this.logger.warn("Parametros no validos");
+			this.logger.warn("parametros no validos");
 		}
 
-		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put("product", new Product());
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("product", this.productManager.insertar(product));
 
 		return new ModelAndView("product/form", model);
 	}
@@ -110,11 +107,39 @@ public class InventoryController {
 		this.logger.trace("Borrar el producto");
 
 		final Map<String, Object> model = new HashMap<String, Object>();
+		String msg = "No se ha podido eliminar el producto[" + id + "]";
+		if (this.productManager.eliminar(id)) {
+			msg = "producto[" + id + "] eliminado";
+			this.logger.info(msg);
+		} else {
+			this.logger.warn(msg);
+		}
 		model.put("msg", "Eliminando producto [" + id + "]...");
 		// Recargo los productos y la fecha
 		model.put("products", this.productManager.getProducts());
 		model.put("fecha", new Date().toString());
 
 		return new ModelAndView("product/inventario", model);
+	}
+
+	/**
+	 * Modificar el producto
+	 *
+	 * @param product
+	 * @param bindingResult
+	 * @return
+	 */
+	@RequestMapping(value = "/inventario/modificar", method = RequestMethod.POST)
+	public ModelAndView modificar(@Valid Product product, BindingResult bindingResult) {
+		this.logger.trace("Modificando producto...");
+
+		if (bindingResult.hasErrors()) {
+			this.logger.warn("Parametros no validos");
+		}
+
+		final Map<String, Object> model = new HashMap<String, Object>();
+		model.put("product", new Product());
+
+		return new ModelAndView("product/form", model);
 	}
 }

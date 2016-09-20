@@ -1,14 +1,5 @@
-<%@ include file="/WEB-INF/views/include.jsp" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@include file="../includes/header.jsp" %>
 
-<html>
-<head>
-  <title>Producto | Nuevo</title>
-  <style>
-    .error { color: red; }
-  </style>  
-</head>
-<body>
 <h1>Crear Producto</h1>
 
 <form:form action="nuevo" method="post" commandName="product">
@@ -33,5 +24,4 @@
 
 <a href="<c:url value="/inventario"/>">&gt;&gt;Inventario</a>
 
-</body>
-</html>
+<%@include file="../includes/footer.jsp" %>

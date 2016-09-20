@@ -52,20 +52,17 @@ public class SimpleProductManager implements ProductManager {
 
 	@Override
 	public boolean eliminar(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.inventarioDAOImpl.eliminar(id);
 	}
 
 	@Override
 	public boolean insertar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.inventarioDAOImpl.insertar(p);
 	}
 
 	@Override
 	public boolean modificar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.inventarioDAOImpl.insertar(p);
 	}
 
 }
