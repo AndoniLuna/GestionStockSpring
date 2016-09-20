@@ -13,7 +13,7 @@ public class Product implements Serializable {
 	 */
 	public Product() {
 		super();
-		this.id = (long) 0;
+		this.id = (long) -1;
 		this.description = "";
 		this.price = (double) 0;
 	}
@@ -22,14 +22,6 @@ public class Product implements Serializable {
 
 	@NotNull
 	private Long id;
-
-	public Long getId() {
-		return this.id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	@NotNull
 	@Size(min = 3, max = 255)
@@ -52,6 +44,14 @@ public class Product implements Serializable {
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public Long getId() {
+		return this.id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override

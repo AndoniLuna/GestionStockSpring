@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,56 +80,45 @@ public class InventoryController {
 		return "producto/insert-producto";
 	}
 
-	// @RequestMapping(value = "/insertar-producto.html/", method =
-	// RequestMethod.POST)
-	// public String insert(@Valid Product product, BindingResult bindingResult)
-	// {
-	// this.logger.trace("Insertando nuevo articulo " + product);
-	// String msg = "No insertado producto " + product;
-	//
-	// if (bindingResult.hasErrors()) {
-	// this.logger.trace("Parametros de nuevo articulo NO validos");
-	// return "producto/insert-producto";
-	// } else {
-	// // this.productManager. TODO insertar metodo "insert·
-	//
-	// if (this.productManager.insertar(product)) {
-	// msg = "Producto " + product + " insertado";
-	// this.logger.info(msg);
-	// } else {
-	// this.logger.warn(msg);
-	// }
-	//
-	// final Map<String, Object> model = new HashMap<String, Object>();
-	// model.put("msg", msg);
-	//
-	// this.logger.info("Insertado " + product);
-	// return "producto/insert-producto";
-	// }
-	//
-	// }
+	@RequestMapping(value = "/insertar-producto.html", method = RequestMethod.POST)
 
-	///////////////////////// NUEVO ARTICULO DESDE FORMULARIO//////////////////////
+	public String insert(@Valid Product product, BindingResult bindingResult) {
+		this.logger.trace("Insertando nuevo articulo " + product);
+		String msg = "No insertado producto " + product;
 
-	@RequestMapping(value = "insertar-producto.html", method = RequestMethod.POST)
-	public ModelAndView saveContact(@ModelAttribute Product product) throws ServletException, IOException {
-		inventarioDao.saveProduct(product);
-		// return new ModelAndView("redirect:/");
-		return listarInventario();
+		if (bindingResult.hasErrors()) {
+			this.logger.trace("Parametros de nuevo articulo NO validos");
+			return "producto/insert-producto";
+		} else {
+
+			if (this.productManager.insertar(product)) {
+
+				msg = "Producto " + product + " insertado";
+				this.logger.info(msg);
+			} else {
+				this.logger.warn(msg);
+			}
+
+			final Map<String, Object> model = new HashMap<String, Object>();
+			model.put("msg", msg);
+
+			this.logger.info("Insertado " + product);
+			return "producto/insert-producto";
+		}
+
 	}
 
-	/////////////////////////VISUALIZADO Y MODIFICADO DE DETALLE PRODUCTO	////////////
+	///////////////////////// VISUALIZADO Y MODIFICADO DE DETALLE PRODUCTO
+	///////////////////////// ////////////
 
-//	@RequestMapping(value = "/detalle-producto.html/{id}", method = RequestMethod.GET)
-//	public ModelAndView detalleArticulo(@PathVariable(value = "id") final long id)
-//			throws ServletException, IOException {
-//		final Map<String, Object> model = new HashMap<String, Object>();
-//		model.put("product", this.productManager.getById(id));
-//		this.logger.trace("Detalle de articulo Articulo " + id);
-//		return new ModelAndView("producto/insert-producto", model);
-//	}
-	
-	
+	@RequestMapping(value = "/detalle-producto.html/{id}", method = RequestMethod.GET)
+	public ModelAndView detalleArticulo(@PathVariable(value = "id") final long id)
+			throws ServletException, IOException {
+		final Map<String, Object> model = new HashMap<String, Object>();
+		model.put("product", this.productManager.getById(id));
+		this.logger.trace("Detalle de articulo Articulo " + id);
+		return new ModelAndView("producto/insert-producto", model);
+	}
 
 	///////////////////////// ELIMINAR ARTICULO/////////////////////////////////
 

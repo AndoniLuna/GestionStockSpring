@@ -1,14 +1,5 @@
-<%@ include file="/WEB-INF/views/include.jsp" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ include file="../includes/header.jsp" %>
 
-<html>
-<head>
-  <title><fmt:message key="priceincrease.title"/></title>
-  <style>
-    .error { color: red; }
-  </style>  
-</head>
-<body>
 <h1><fmt:message key="priceincrease.title"/></h1>
 
 <form:form action="incremento-precio.html" method="post" commandName="priceIncreaseForm">
@@ -39,5 +30,4 @@
 
 <a href="<c:url value=""/>">Home</a>
 
-</body>
-</html>
+<%@ include file="../includes/footer.jsp" %>

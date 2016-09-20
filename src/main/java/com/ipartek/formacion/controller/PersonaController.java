@@ -61,6 +61,7 @@ public class PersonaController {
 		Persona p = new Persona();
 		p.setEdad(18);
 		model.addAttribute("persona", p);
+		// model.addAttribute("title", "Nueva persona");
 
 		return "insert-persona";
 	}

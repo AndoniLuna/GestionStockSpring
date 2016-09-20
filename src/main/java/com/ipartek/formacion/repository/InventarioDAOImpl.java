@@ -137,21 +137,56 @@ public class InventarioDAOImpl implements InventarioDAO {
 	// // TODO Auto-generated method stub
 	// return false;
 	// }
-	public void saveProduct(Product product) {
+	public boolean insertar(final Product product) {
+		boolean resul = false;
+		int affectedRows = -1;
+		// if (1 == product.getId()) {
+		final KeyHolder keyHolder = new GeneratedKeyHolder();
+		final String sql = "INSERT INTO products (`description`, `price`) VALUES (?, ?)";
+		affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				final PreparedStatement ps = conn.prepareStatement(sql);
 
-		String sql = "INSERT INTO products (description, price)" + " VALUES (?, ?)";
-		jdbctemplate.update(sql, product.getDescription(), product.getPrice());
+				ps.setString(1, product.getDescription());
+				ps.setDouble(2, product.getPrice());
 
+				return ps;
+			}
+
+		}, keyHolder);
+		resul = true;
+		product.setId(keyHolder.getKey().longValue());
+
+		return resul;
 	}
 
 	@Override
-	public void updateProduct(Product product) {
-		if (product.getId() > 0) {
-			// update
-			String sql = "UPDATE products SET description=?, price=? WHERE id=?";
-			jdbctemplate.update(sql, product.getDescription(), product.getPrice(), product.getId());
+	public boolean modificar(final Product product) {
+		boolean resul = false;
+		int affectedRows = -1;
+		final KeyHolder keyHolder = new GeneratedKeyHolder();
+		final String sql = "UPDATE `products` SET `id`=?, `description`=?, `price`=? WHERE `id`= ?;";
 
+		affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				final PreparedStatement ps = conn.prepareStatement(sql);
+
+				ps.setString(1, product.getDescription());
+				ps.setDouble(2, product.getPrice());
+
+				return ps;
+			}
+
+		}, keyHolder);
+
+		if (affectedRows == 1)
+
+		{
+			resul = true;
 		}
-
+		return resul;
 	}
+
 }

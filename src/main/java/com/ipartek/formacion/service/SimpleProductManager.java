@@ -57,14 +57,13 @@ public class SimpleProductManager implements ProductManager {
 
 	@Override
 	public boolean insertar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.inventarioDAOImpl.insertar(p);
+
 	}
 
 	@Override
 	public boolean modificar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.inventarioDAOImpl.modificar(p);
 	}
 
 	// public void setProducts(List<Product> products) {

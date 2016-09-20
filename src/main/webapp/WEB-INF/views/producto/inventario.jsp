@@ -1,8 +1,6 @@
-<%@ include file="/WEB-INF/views/include.jsp" %>
 
-<html>
-  <head><title><fmt:message key="title"/></title></head>
-  <body>
+<%@ include file="../includes/header.jsp" %>
+
     <h1><fmt:message key="heading"/></h1>
     <p><fmt:message key="greeting"/> <c:out value="${fecha}"/></p>
     <h3>Productos</h3>
@@ -18,5 +16,4 @@
      <a href="detalle-producto.html/${prod.id}"> <c:out value="${prod.description}"/></a> <i>$<c:out value="${prod.price}"/></i>
       <a href="eliminar-producto/${prod.id}">ELIMINAR</a><br><br>
     </c:forEach>
-  </body>
-</html>
+<%@ include file="../includes/footer.jsp" %>
