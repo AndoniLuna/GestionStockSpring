@@ -1,6 +1,8 @@
 package com.ipartek.formacion.repository;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ipartek.formacion.domain.Product;
 import com.ipartek.formacion.repository.mapper.ProductMapper;
+import com.ipartek.formacion.service.ProductManager;
 
 @Repository("inventarioDAOImpl")
 public class InventarioDAOImpl implements InventarioDAO {
@@ -32,20 +35,99 @@ public class InventarioDAOImpl implements InventarioDAO {
 	@Autowired
 	private DataSource dataSource = null;
 	private JdbcTemplate jdbctemplate;
+	
+	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/gss";
+	private static final String DB_USER = "root";
+	private static final String DB_PASSWORD = "";
 
+	
+	
 	@Autowired
-	@Override
+	@Override	
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbctemplate = new JdbcTemplate(dataSource);
 
 	}
+	@Autowired
+	private ProductManager productManager;
 
 	@Override
-	public void increasePrice(int percentage) {
-		// TODO CallableStatement con procedimiento almacenado en bd
+	/**
+	 * + Ejecuta el procedimiento almacenado 'incrementarPrecio' al que hay que pasarle un parametro
+	 * 'porcentaje'.
+	 * + Este proc. almacenado se encarga de incrementar el precio de todos los articulos.
+	 */
+	public void increasePrice(int percentage) throws SQLException {		
+
+		Connection dbConnection = null;
+		CallableStatement callableStatement = null;
+
+		String sql = "{call incrementarPrecio(?)}";
+
+		try {
+			dbConnection = getDBConnection();
+			callableStatement = dbConnection.prepareCall(sql);
+			
+			// El procedimiento almacenado necesita un parametro 'porcentaje' esto se lo pasamos con el SetInt
+			//en cada caso habrá que usar el set correspondiente en este caso se requiere un integer,
+			//por ello setInt
+			callableStatement.setInt(1, percentage);
+			
+
+			// execute incrementarPrecio store procedure
+			callableStatement.executeUpdate();
+			
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (callableStatement != null) {
+				callableStatement.close();
+			}
+
+			if (dbConnection != null) {
+				dbConnection.close();
+			}
+
+		}
 
 	}
+		
+
+	private static Connection getDBConnection() {
+
+		Connection dbConnection = null;
+
+		try {
+
+			Class.forName(DB_DRIVER);
+
+		} catch (ClassNotFoundException e) {
+
+			System.out.println(e.getMessage());
+
+		}
+
+		try {
+
+			dbConnection = DriverManager.getConnection(
+				DB_CONNECTION, DB_USER,DB_PASSWORD);
+			return dbConnection;
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		}
+
+		return dbConnection;
+	}
+	
 
 	@Override
 	public List<Product> getProducts() {
@@ -91,11 +173,10 @@ public class InventarioDAOImpl implements InventarioDAO {
 		return resul;
 	}
 
-	
 	public boolean insertar(final Product product) {
 		boolean resul = false;
 		int affectedRows = -1;
-		
+
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		final String sql = "INSERT INTO products (`description`, `price`) VALUES (?, ?)";
 		affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
@@ -128,10 +209,10 @@ public class InventarioDAOImpl implements InventarioDAO {
 			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
 				final PreparedStatement ps = conn.prepareStatement(sql);
 
-				ps.setLong(1,product.getId());
+				ps.setLong(1, product.getId());
 				ps.setString(2, product.getDescription());
 				ps.setDouble(3, product.getPrice());
-				ps.setLong(4,product.getId());
+				ps.setLong(4, product.getId());
 
 				return ps;
 			}

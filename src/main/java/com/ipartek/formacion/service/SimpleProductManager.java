@@ -1,5 +1,6 @@
 package com.ipartek.formacion.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,24 +20,20 @@ public class SimpleProductManager implements ProductManager {
 
 	private List<Product> products;
 
+
+	
 	@Override
-	public void increasePrice(int percentage) throws IllegalArgumentException {
-
-		if (percentage < INCREASE_MIN || percentage > INCREASE_MAX) {
-			throw new IllegalArgumentException(MSG_ILLEGALARGUMENT_EXCEPTION);
-
-		} else {
-			if (this.products != null) {
-				for (final Product product : this.products) {
-					if (product != null) {
-						final double newPrice = product.getPrice().doubleValue() * (100 + percentage) / 100;
-						product.setPrice(newPrice);
-					}
-				}
-			}
-		}
-
+	public Object increasePrice(int increase) {
+		try {
+		this.inventarioDAOImpl.increasePrice(increase);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+		return increase;
+		
 	}
+	
 
 	@Override
 	public List<Product> getProducts() {

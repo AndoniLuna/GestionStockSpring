@@ -1,6 +1,7 @@
 package com.ipartek.formacion.repository;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -9,7 +10,7 @@ import com.ipartek.formacion.domain.Product;
 
 public interface InventarioDAO extends Serializable {
 
-	void increasePrice(int percentage);
+	void increasePrice(int percentage) throws SQLException;
 
 	List<Product> getProducts();
 

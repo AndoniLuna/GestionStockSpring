@@ -17,9 +17,10 @@ public interface ProductManager extends Serializable {
 	 *
 	 * @param percentage
 	 *            {@code int} porcentaje a incrementar maximo 50, minimo 0
+	 * @return 
 	 * @throws IllegalArgumentException
 	 */
-	public void increasePrice(int percentage) throws IllegalArgumentException;
+	public Object increasePrice(int increase) throws IllegalArgumentException;
 
 	public List<Product> getProducts();
 

@@ -39,6 +39,7 @@ public class PriceIncreaseFormController {
 			return "producto/incremento-precio";
 		}
 
+		//final int increase = increa
 		final int increase = priceIncreaseForm.getPorcentaje();
 		this.logger.info("Incrementando todos los precios " + increase + "%.");
 
