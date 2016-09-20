@@ -1,8 +1,5 @@
-<%@ include file="/WEB-INF/views/include.jsp" %>
+<%@ include file="../includes/header.jsp"%>
 
-<html>
-  <head><title><fmt:message key="title"/></title></head>
-  <body>
     <h1><fmt:message key="heading"/></h1>
     <p><fmt:message key="greeting"/> <c:out value="${fecha}"/></p>
     <h3>Productos</h3>
@@ -27,8 +24,14 @@
        <a href="<c:url value="inventario/eliminar/${prod.id }"/>">
        		[X]
        </a>
+       <a href="<c:url value="inventario/modificar/${prod.id }"/>">
+       		[Modificar]
+       </a>
+       
+       
        
         <br><br>
     </c:forEach>
-  </body>
-</html>
+
+
+<%@ include file="../includes/footer.jsp"%>

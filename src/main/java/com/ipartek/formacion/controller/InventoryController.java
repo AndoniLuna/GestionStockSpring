@@ -63,19 +63,24 @@ public class InventoryController {
 
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put("product", new Product());
+		model.put("isNew", true);
 
 		return new ModelAndView("product/form", model);
 	}
 
+	/* ** Crea el producto en la BBDD*** */
 	@RequestMapping(value = "/inventario/nuevo", method = RequestMethod.POST)
 	public ModelAndView crear(@Valid Product product, BindingResult bindingResult) {
 		this.logger.trace("Creando producto....");
 
 		if (bindingResult.hasErrors()) {
 			this.logger.warn("parametros no validos");
+		} else {
+			this.productManager.insertar(product);
 		}
 
 		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("isNew", true);
 		// model.put("product", new Product());
 
 		return new ModelAndView("product/form", model);
@@ -99,10 +104,9 @@ public class InventoryController {
 	 * **************************** Eliminar producto
 	 *****************************/
 	@RequestMapping(value = "/inventario/eliminar/{id}", method = RequestMethod.GET)
-	public void eliminar(@PathVariable(value = "id") final long id) throws ServletException, IOException {
+	public ModelAndView eliminar(@PathVariable(value = "id") final long id) throws ServletException, IOException {
 		this.logger.trace("Eliminando producto[" + id + "]....");
 
-		Map<String, Object> model = new HashMap<String, Object>();
 		String msg = "No eliminado producto[" + id + "]";
 		if (this.productManager.eliminar(id)) {
 			msg = "producto[" + id + "] eliminado";
@@ -110,11 +114,27 @@ public class InventoryController {
 		} else {
 			this.logger.warn(msg);
 		}
+
+		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("msg", msg);
 
-		listarInventario();
+		return new ModelAndView("product/inventario", model);
+	}
 
-		// return new ModelAndView("product/inventario", model);
+	/*
+	 * **************************** Modificar producto
+	 *****************************/
+	@RequestMapping(value = "/inventario/modificar/{id}", method = RequestMethod.GET)
+	public ModelAndView modificar(@PathVariable(value = "id") final long id) throws ServletException, IOException {
+		this.logger.trace("Mostrar vista para modificar[" + id + "]....");
+
+		Product pDetalle = productManager.getById(id);
+
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("product", pDetalle);
+		model.put("isNew", false);
+
+		return new ModelAndView("product/form", model);
 	}
 
 }

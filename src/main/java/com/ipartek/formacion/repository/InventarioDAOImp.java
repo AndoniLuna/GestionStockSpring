@@ -1,6 +1,9 @@
 package com.ipartek.formacion.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,6 @@ import org.springframework.stereotype.Repository;
 
 import com.ipartek.formacion.domain.Product;
 import com.ipartek.formacion.repository.mapper.ProductMapper;
-import com.mysql.jdbc.PreparedStatement;
 
 @Repository("inventarioDAOImp")
 public class InventarioDAOImp implements InventarioDAO {
@@ -119,36 +121,50 @@ public class InventarioDAOImp implements InventarioDAO {
 	}
 
 	@Override
-	public boolean insertar(Product p) {
-		boolean result = false;
+	public boolean insertar(final Product p) {
+		boolean resul = false;
 		int affectedRows = -1;
+		KeyHolder keyHolder = new GeneratedKeyHolder();
 
-		// comprobar el ultimo id de la BBDD
+		final String sqlInsert = "INSERT INTO `products` ( `description`, `price`) VALUES ( ? , ? );";
+		affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				final PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, p.getDescription());
+				ps.setDouble(2, p.getPrice());
 
-		if (0 == p.getId()) {
+				return ps;
+			}
+		}, keyHolder);
 
-			final KeyHolder keyHolder = new GeneratedKeyHolder();
-			final String sqlInsert = "INSERT INTO `productos` ( `description`, `price`) VALUES ( ? , ? );";
-			affectedRows = this.jdbcTemplateObject.update(new PreparedStatementCreator() {
-				@Override
-				public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
-					final PreparedStatement ps = conn.prepareStatement(sqlInsert);
-					ps.setString(1, p.getDescription());
-					ps.setString(2, p.getPrice());
-
-					return ps;
-				}
-			}, keyHolder);
-
+		if (affectedRows == 1) {
+			resul = true;
 			p.setId(keyHolder.getKey().longValue());
+			this.logger.trace("Producto creado OK");
 		}
+
 		return true;
 	}
 
 	@Override
 	public boolean modificar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+		int affectedRows = -1;
+
+		final String sqlModificar = "UPDATE `gss`.`products` SET price=" + p.getPrice() + ", description="
+				+ p.getDescription() + "  WHERE  id=" + p.getId();
+
+		affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				final PreparedStatement ps = conn.prepareStatement(sqlModificar);
+
+				return ps;
+			}
+		});
+
+		return true;
 	}
 
 }
