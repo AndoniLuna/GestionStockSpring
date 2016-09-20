@@ -1,8 +1,5 @@
-<%@ include file="/WEB-INF/views/include.jsp" %>
+<%@ include file="includes/header.jsp" %>
 
-<html>
-  <head><title><fmt:message key="title"/></title></head>
-  <body>
     <h1><fmt:message key="heading"/></h1>
     <p><fmt:message key="greeting"/> <c:out value="${fecha}"/></p>
     <h3>Personas</h3>
@@ -10,5 +7,5 @@
       <c:out value="${persona.nombre}"/> <br><br>
     </c:forEach>
 	<a href="<c:url value="/"/>">Home</a>
-  </body>
-</html>
+
+<%@ include file="includes/footer.jsp" %>

@@ -44,4 +44,24 @@ public class SimpleProductManager implements ProductManager {
 		return this.products;
 	}
 
+	@Override
+	public Product getById(long id) {
+		return this.inventarioDAOImpl.getById(id);
+	}
+
+	@Override
+	public boolean eliminar(long id) {
+		return this.inventarioDAOImpl.eliminar(id);
+	}
+
+	@Override
+	public boolean insertar(Product p) {
+		return this.inventarioDAOImpl.insertar(p);
+	}
+
+	@Override
+	public boolean modificar(Product p) {
+		return this.inventarioDAOImpl.modificar(p);
+	}
+
 }

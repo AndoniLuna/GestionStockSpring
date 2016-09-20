@@ -22,5 +22,13 @@ public interface ProductManager extends Serializable {
 	public void increasePrice(int percentage) throws IllegalArgumentException;
 
 	public List<Product> getProducts();
+	
+	Product getById(long id);
+	
+	boolean eliminar(long id);
+	
+	boolean insertar(Product p);
+	
+	boolean modificar(Product p);
 
 }

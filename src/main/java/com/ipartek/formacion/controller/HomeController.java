@@ -39,6 +39,7 @@ public class HomeController {
 
 		// request.setAttribute('name','value');
 		model.addAttribute("serverTime", formattedDate);
+		model.addAttribute("title", "Home");
 
 		return "home";
 	}

@@ -19,7 +19,7 @@ import com.ipartek.formacion.service.ProductManager;
 @RequestMapping(value = "/incremento-precio.html")
 public class PriceIncreaseFormController {
 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	@Autowired
 	private ProductManager productManager;
@@ -36,7 +36,7 @@ public class PriceIncreaseFormController {
 	public String onSubmit(@Valid PriceIncreaseForm priceIncreaseForm, BindingResult result) {
 		// Si hay errores volver pagina priceincrease.jsp
 		if (result.hasErrors()) {
-			return "incremento-precio";
+			return "product/incremento-precio";
 		}
 
 		final int increase = priceIncreaseForm.getPorcentaje();
@@ -53,7 +53,7 @@ public class PriceIncreaseFormController {
 		PriceIncreaseForm priceIncrease = new PriceIncreaseForm();
 		priceIncrease.setPorcentaje(15);
 		model.addAttribute("priceIncreaseForm", priceIncrease);
-		return "incremento-precio";
+		return "product/incremento-precio";
 	}
 
 }
