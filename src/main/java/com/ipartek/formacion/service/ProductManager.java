@@ -29,9 +29,7 @@ public interface ProductManager extends Serializable {
 	
 	boolean eliminar(long id);
 	
-	boolean insertar(Product producto);
-	
-	boolean modificar(Product producto);
+	boolean guardar(Product producto);	
 	
 	void setDataSource(DataSource dataSource);
 	

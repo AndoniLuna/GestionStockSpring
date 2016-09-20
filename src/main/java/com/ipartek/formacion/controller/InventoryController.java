@@ -60,25 +60,14 @@ public class InventoryController {
 	 * @return
 	 */
 	@RequestMapping(value = "/inventario/nuevo" , method = RequestMethod.GET)
-	public ModelAndView mostrarFormulario(){
+	public ModelAndView mostrarFormulario(@Valid Product product,BindingResult br){
 		this.logger.trace("Mostrar formulario para crear nuevos productos");
-		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put("product", new Product());
-		return new ModelAndView("product/form", model);
-	}
-	
-	
-	@RequestMapping(value = "/inventario/nuevo" , method = RequestMethod.POST)
-	public ModelAndView crear(@Valid Product product,BindingResult br){
-		this.logger.trace("Creando nuevo producto");
 		if(br.hasErrors()){
 			this.logger.warn("Valores no validos");
 		}
 		final Map<String, Object> model = new HashMap<String, Object>();
-		
-		
-		model.put("product",this.productManager.insertar(product));
-		return new ModelAndView("product/form",model);
+		model.put("product", new Product());
+		return new ModelAndView("product/form", model);
 	}
 	
 	@RequestMapping(value = "/inventario/detalle/{id}" , method = RequestMethod.GET)
@@ -88,6 +77,21 @@ public class InventoryController {
 		model.put("product", this.productManager.getById(id));
 		return new ModelAndView("product/form",model);
 	}
+	
+	
+	@RequestMapping(value = "/inventario/guardar" , method = RequestMethod.POST)
+	public ModelAndView guardar(@Valid Product product,BindingResult br){
+		this.logger.trace("Guardando producto");
+		if(br.hasErrors()){
+			this.logger.warn("Valores no validos");
+		}
+		final Map<String, Object> model = new HashMap<String, Object>();
+		model.put("product",this.productManager.guardar(product));
+		model.put("products", this.productManager.getProducts());
+		this.logger.trace("PRODUCTO GUARDADO");
+		return new ModelAndView("product/inventario",model);
+	}
+	
 	
 	
 	@RequestMapping(value = "/inventario/eliminar/{id}" , method = RequestMethod.GET)

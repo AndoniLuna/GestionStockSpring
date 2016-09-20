@@ -10,6 +10,6 @@
 	<meta charset="utf-8">
 	<title>${title}</title>
 	<base href="${pageContext.request.contextPath}/"></base>
-	<link rel="stylesheet" href="css/styles.css?v=1.0">
+	<link rel="stylesheet" href="resources/css/styles.css?v=1.0">
 </head>
 <body>

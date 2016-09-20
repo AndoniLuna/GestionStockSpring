@@ -3,14 +3,16 @@
 
 	<h1>Crear producto</h1>
 	
-	<form:form action="nuevo" method="post" commandName="product">
+	
+	
+	<form:form action="inventario/guardar" method="post" commandName="product">
 	  <table width="95%" bgcolor="f8f8ff" border="0" cellspacing="0" cellpadding="5">
 	    <tr>
 	      <td align="right" width="20%"></td>
 	        <td width="20%">
 	       		<h4>ID</h4>
-	         	<form:input path="id"/><br>
-	        	<form:errors path="id" cssClass="error"/><br>
+	         	<form:input path="id" disabled="true"/><br>
+	         	<form:errors path="id" cssClass="error"/><br>
 	         	<h4>DESCRIPTION</h4>
 	         	<form:input path="description" placeholder="Minimo tres letras"/><br>
 	         	<form:errors path="description" cssClass="error"/><br>
