@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ipartek.formacion.domain.Product;
-import com.ipartek.formacion.repository.InventarioDAO;
 import com.ipartek.formacion.service.ProductManager;
 
 @Controller
@@ -31,12 +30,12 @@ public class InventoryController {
 	@Autowired
 	private ProductManager productManager;
 
-	@Autowired
-	private InventarioDAO inventarioDao;
-
-	// public void setProductManager(ProductManager productManager) {
-	// this.productManager = productManager;
-	// }
+	
+	/**
+	 * booModificar evalua si en '@RequestMapping(value = "/insertar-producto.html"'
+	 * se va a realizar una modificacion o una insercion nueva
+	 */
+	public boolean booModificar = false;
 
 	/**
 	 * Mostrar listado de todos los productos del inventario
@@ -62,24 +61,31 @@ public class InventoryController {
 	}
 
 	/**
-	 * Muestra formulario para crear nuevo producto
+	 * Muestra formulario para crear nuevo producto, al acceder por el Anchor se entiende que
+	 * lo que se va a hacer es un nuevo registro, por lo que se establece 'booModificar = false'
 	 * 
 	 * @param model
 	 * @return
 	 */
 
+	@SuppressWarnings("unchecked")
 	///////////////////////// MUESTRA EL FORMULARIO DE NUEVO ARTICULO DESDE EL
 	///////////////////////// ANCHOR//////////////////////
 	@RequestMapping(value = "/insertar-producto.html", method = RequestMethod.GET)
 	public String preView(Model model) {
 		this.logger.trace("Antes de cargar insert-producto.jsp");
-
 		Product p = new Product();
 		((Map<String, Object>) model).put("product", p);
-
+		booModificar = false;
 		return "producto/insert-producto";
 	}
 
+	/**
+	 * Con este Mapping realizamos la insercion o modificación de un registro
+	 * @param product
+	 * @param bindingResult
+	 * @return
+	 */
 	@RequestMapping(value = "/insertar-producto.html", method = RequestMethod.POST)
 
 	public String insert(@Valid Product product, BindingResult bindingResult) {
@@ -90,20 +96,37 @@ public class InventoryController {
 			this.logger.trace("Parametros de nuevo articulo NO validos");
 			return "producto/insert-producto";
 		} else {
+			if (!booModificar) {
+				if (this.productManager.insertar(product)) {
 
-			if (this.productManager.insertar(product)) {
+					msg = "Producto " + product + " insertado";
+					this.logger.info(msg);
+				} else {
+					this.logger.warn(msg);
+				}
 
-				msg = "Producto " + product + " insertado";
-				this.logger.info(msg);
+				final Map<String, Object> model = new HashMap<String, Object>();
+				model.put("msg", msg);
+
+				this.logger.info("Insertado " + product);
+				booModificar = true;
+				return "producto/insert-producto";
 			} else {
-				this.logger.warn(msg);
+				if (this.productManager.modificar(product)) {
+
+					msg = "Producto " + product + " modificado";
+					this.logger.info(msg);
+				} else {
+					this.logger.warn(msg);
+				}
+
+				final Map<String, Object> model = new HashMap<String, Object>();
+				model.put("msg", msg);
+
+				this.logger.info("Modificado " + product);
+				return "producto/insert-producto";
+
 			}
-
-			final Map<String, Object> model = new HashMap<String, Object>();
-			model.put("msg", msg);
-
-			this.logger.info("Insertado " + product);
-			return "producto/insert-producto";
 		}
 
 	}
@@ -113,9 +136,11 @@ public class InventoryController {
 
 	@RequestMapping(value = "/detalle-producto.html/{id}", method = RequestMethod.GET)
 	public ModelAndView detalleArticulo(@PathVariable(value = "id") final long id)
+
 			throws ServletException, IOException {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put("product", this.productManager.getById(id));
+		booModificar = true;
 		this.logger.trace("Detalle de articulo Articulo " + id);
 		return new ModelAndView("producto/insert-producto", model);
 	}

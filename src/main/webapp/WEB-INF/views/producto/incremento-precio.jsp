@@ -3,7 +3,7 @@
 <h1><fmt:message key="priceincrease.title"/></h1>
 
 <form:form action="incremento-precio.html" method="post" commandName="priceIncreaseForm">
-  <table width="95%" bgcolor="f8f8ff" border="0" cellspacing="0" cellpadding="5">
+  <table>
     <tr>
       <td align="right" width="20%"><fmt:message key="increase"/> (%):</td>
         <td width="20%">
@@ -25,7 +25,7 @@
         
   </table>
   <br>
-  <input type="submit" align="center" value="Ejecutar">
+  <input type="submit" value="Ejecutar">
 </form:form>
 
 <a href="<c:url value=""/>">Home</a>
