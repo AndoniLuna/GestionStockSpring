@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ipartek.formacion.domain.Product;
 import com.ipartek.formacion.repository.mapper.ProductMapper;
-import com.ipartek.formacion.service.SimpleProductManager;
+
 
 @Repository("inventarioDAOImpl")
 public class InventarioDAOImpl implements InventarioDAO {
@@ -104,11 +104,15 @@ public class InventarioDAOImpl implements InventarioDAO {
 				}
 			}, keyHolder);
 			producto.setId(keyHolder.getKey().longValue());
+			if(affectedRows == 1){
+				result = true;
+			}
 			this.logger.trace("CREAR  -> CONTROLLER GUARDAR");
 
 		} else {
 			final String sqlInsert = "UPDATE  `products` SET  `description`=? , `price`=? WHERE id=" + producto.getId();
 			affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
+				@Override
 				public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
 					final PreparedStatement ps = conn.prepareStatement(sqlInsert);
 					ps.setString(1, producto.getDescription());

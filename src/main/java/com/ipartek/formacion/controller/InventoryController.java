@@ -79,7 +79,7 @@ public class InventoryController {
 	}
 	
 	
-	@RequestMapping(value = "/inventario/guardar" , method = RequestMethod.POST)
+	@RequestMapping(value = "/inventario/guardar/{id}" , method = RequestMethod.POST)
 	public ModelAndView guardar(@Valid Product product,BindingResult br){
 		this.logger.trace("Guardando producto");
 		if(br.hasErrors()){
@@ -91,6 +91,7 @@ public class InventoryController {
 		this.logger.trace("PRODUCTO GUARDADO");
 		return new ModelAndView("product/inventario",model);
 	}
+	
 	
 	
 	
