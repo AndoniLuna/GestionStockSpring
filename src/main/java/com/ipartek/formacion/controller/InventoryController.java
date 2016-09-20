@@ -73,12 +73,14 @@ public class InventoryController {
 
 		if (bindingResult.hasErrors()) {
 			this.logger.warn("parametros no validos");
+		} else {
+			this.productManager.insertar(product);
 		}
 
 		Map<String, Object> model = new HashMap<String, Object>();
-		// model.put("product", new Product());
-
+		model.put("product", product);
 		return new ModelAndView("product/form", model);
+
 	}
 
 	@RequestMapping(value = "/inventario/detalle/{id}", method = RequestMethod.GET)
@@ -93,10 +95,9 @@ public class InventoryController {
 	}
 
 	@RequestMapping(value = "/inventario/eliminar/{id}", method = RequestMethod.GET)
-	public void eliminar(@PathVariable(value = "id") final long id) throws ServletException, IOException {
+	public ModelAndView eliminar(@PathVariable(value = "id") final long id) throws ServletException, IOException {
 		this.logger.trace("Eliminando producto[" + id + "]....");
 
-		Map<String, Object> model = new HashMap<String, Object>();
 		String msg = "No eliminado producto[" + id + "]";
 		if (this.productManager.eliminar(id)) {
 			msg = "producto[" + id + "] eliminado";
@@ -104,11 +105,11 @@ public class InventoryController {
 		} else {
 			this.logger.warn(msg);
 		}
+
+		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("msg", msg);
 
-		listarInventario();
-
-		// return new ModelAndView("product/inventario", model);
+		return new ModelAndView("product/inventario", model);
 	}
 
 }

@@ -1,5 +1,8 @@
 package com.ipartek.formacion.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.ipartek.formacion.domain.Product;
@@ -88,9 +94,28 @@ public class InventarioDAOImpl implements InventarioDAO {
 	}
 
 	@Override
-	public boolean insertar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean insertar(final Product p) {
+		boolean resul = false;
+		int affectedRows = -1;
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+
+		final String sqlInsert = "INSERT INTO `products` (  `description`, `price`) VALUES ( ? , ?  );";
+		affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				final PreparedStatement ps = conn.prepareStatement(sqlInsert);
+				ps.setString(1, p.getDescription());
+				ps.setDouble(2, p.getPrice());
+				return ps;
+			}
+		}, keyHolder);
+
+		if (affectedRows == 1) {
+			resul = true;
+			p.setId(keyHolder.getKey().longValue());
+		}
+
+		return resul;
 	}
 
 	@Override

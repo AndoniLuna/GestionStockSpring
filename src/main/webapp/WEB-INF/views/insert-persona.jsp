@@ -1,14 +1,4 @@
-<%@ include file="/WEB-INF/views/include.jsp" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
-<html>
-<head>
-  <title><fmt:message key="persona.crear.title"/></title>
-  <style>
-    .error { color: red; }
-  </style>  
-</head>
-<body>
+<%@include file="includes/header.jsp" %>
 
 	<h1><fmt:message key="persona.crear.title"/></h1>
 
@@ -27,6 +17,4 @@
 		
 	</form:form>
 
-
-</body>
-</html>
+<%@include file="includes/footer.jsp" %>

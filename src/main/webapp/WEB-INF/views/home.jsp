@@ -1,16 +1,9 @@
-<%@ include file="/WEB-INF/views/include.jsp" %>
-
-
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
+<%@include file="includes/header.jsp" %>
 
 <ol>
 	<li><a href="inventario">Ver inventario</a></li>
 	<li><a href="persona">Ver Personas</a></li>	
-	<li><a href="<c:url value="insertar-persona.html"/>">Crear Persona</a></li>
+	<li><a href="insertar-persona.html">Crear Persona</a></li>
 </ol>
 
 <P>  The time on the server is ${serverTime}. </P>
@@ -21,5 +14,4 @@
 	<li>UserAgent:${requestUa}</li>
 </ul>
 
-</body>
-</html>
+<%@include file="includes/header.jsp" %>

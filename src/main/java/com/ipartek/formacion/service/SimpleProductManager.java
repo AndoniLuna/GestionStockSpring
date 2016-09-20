@@ -55,8 +55,7 @@ public class SimpleProductManager implements ProductManager {
 
 	@Override
 	public boolean insertar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.inventarioDAOImpl.insertar(p);
 	}
 
 	@Override
