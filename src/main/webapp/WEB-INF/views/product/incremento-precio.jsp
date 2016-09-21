@@ -3,6 +3,8 @@
 
 <h1><fmt:message key="priceincrease.title"/></h1>
 
+<a href="">Home</a>
+
 <form:form action="incremento-precio.html" method="post" commandName="priceIncreaseForm">
   <table width="95%" bgcolor="f8f8ff" border="0" cellspacing="0" cellpadding="5">
     <tr>
@@ -29,6 +31,6 @@
   <input type="submit" align="center" value="Ejecutar">
 </form:form>
 
-<a href="<c:url value=""/>">Home</a>
+
 
 <%@include file="../includes/footer.jsp" %>

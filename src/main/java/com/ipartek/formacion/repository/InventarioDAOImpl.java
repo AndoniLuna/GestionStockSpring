@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -29,19 +32,31 @@ public class InventarioDAOImpl implements InventarioDAO {
 
 	@Autowired
 	private DataSource dataSource;
+
 	private JdbcTemplate jdbctemplate;
+	private SimpleJdbcCall jdbcCall;
 
 	@Autowired
 	@Override
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbctemplate = new JdbcTemplate(this.dataSource);
+		this.jdbcCall = new SimpleJdbcCall(this.dataSource);
 	}
 
 	@Override
 	public void increasePrice(int percentage) {
-		// TODO CallableStatement con procedimiento almacenado en BBDD
+		this.logger.trace("llamando Rutin almacenada 'incrementar_precio'");
+		this.jdbcCall.withProcedureName("incrementar_precio");
 
+		SqlParameterSource parameterIn = new MapSqlParameterSource().addValue("porcentaje", percentage);
+
+		this.jdbcCall.execute(parameterIn);
+		/*
+		 * Si tuvierasmos parametros de salida 'out', ej: Map<String, Object>
+		 * out = jdbcCall.execute(in); out.get("nombre_paremetro_salida");
+		 */
+		this.logger.info("Incrementado todos los productos un " + percentage + "%");
 	}
 
 	@Override
