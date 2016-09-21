@@ -64,6 +64,7 @@ public class InventoryController {
 
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put("product", new Product());
+		model.put("isNew", true);
 		return new ModelAndView("product/form", model);
 	}
 
@@ -74,8 +75,8 @@ public class InventoryController {
 	 * @param bindingResult
 	 * @return
 	 */
-	@RequestMapping(value = "/inventario/nuevo", method = RequestMethod.POST)
-	public ModelAndView crear(@Valid Product product, BindingResult bindingResult) {
+	@RequestMapping(value = "/inventario/save", method = RequestMethod.POST)
+	public ModelAndView salvar(@Valid Product product, BindingResult bindingResult) {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -129,6 +130,7 @@ public class InventoryController {
 		final Map<String, Object> model = new HashMap<String, Object>();
 
 		model.put("product", this.productManager.getById(id));
+		model.put("isNew", false);
 
 		return new ModelAndView("product/form", model);
 	}
