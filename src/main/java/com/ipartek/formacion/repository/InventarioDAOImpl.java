@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ipartek.formacion.domain.Product;
 import com.ipartek.formacion.repository.mapper.ProductMapper;
+import com.mysql.jdbc.Statement;
 
 @Repository("inventarioDAOImpl")
 public class InventarioDAOImpl implements InventarioDAO {
@@ -81,10 +82,8 @@ public class InventarioDAOImpl implements InventarioDAO {
 		Product p = null;
 		// TODO cambiar por PreparedStatement
 		final String SQL = "SELECT id, description, price FROM products WHERE id=" + id;
-
 		try {
 			p = this.jdbctemplate.queryForObject(SQL, new ProductMapper());
-
 		} catch (EmptyResultDataAccessException e) {
 			this.logger.warn("No existen productos con ID=" + id);
 			p = null;
@@ -118,7 +117,7 @@ public class InventarioDAOImpl implements InventarioDAO {
 		affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
-				final PreparedStatement ps = conn.prepareStatement(sqlInsert);
+				final PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, p.getDescription());
 				ps.setDouble(2, p.getPrice());
 				return ps;
@@ -135,8 +134,10 @@ public class InventarioDAOImpl implements InventarioDAO {
 
 	@Override
 	public boolean modificar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+		final String SQL = "UPDATE `products` SET `description`=? , `price`=? WHERE  `id`=?;";
+		Object[] arguments = { p.getDescription(), p.getPrice(), p.getId() };
+		int affectedRows = this.jdbctemplate.update(SQL, arguments);
+		return (affectedRows == 1) ? true : false;
 	}
 
 }

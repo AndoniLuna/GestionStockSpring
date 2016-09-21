@@ -51,9 +51,13 @@ public class Product implements Serializable {
 		this.price = price;
 	}
 
+	public boolean isNew() {
+		return (this.id == 0) ? true : false;
+	}
+
 	@Override
 	public String toString() {
-		return "Product [description=" + this.description + ", price=" + this.price + "]";
+		return "Product [id=" + this.id + ", description=" + this.description + ", price=" + this.price + "]";
 	}
 
 }
