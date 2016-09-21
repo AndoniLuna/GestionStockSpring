@@ -17,7 +17,6 @@
 		<property name="password" value="${mysql.pass}" />
 	</bean>
 	
-
 	<!-- Personas -->
 	<bean id="persona1" class="com.ipartek.formacion.domain.Persona">
 		<property name="nombre" value="Manolo"></property>
