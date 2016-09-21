@@ -12,6 +12,7 @@
 		<org.springframework-version>4.3.2.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<mysql.version>5.1.6</mysql.version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -32,6 +33,22 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+			
+		<!-- Persistencia -->	
+			<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+			<dependency>
+    			<groupId>org.springframework</groupId>
+    			<artifactId>spring-jdbc</artifactId>
+    			<version>${org.springframework-version}</version>
+			</dependency>	
+			
+			<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+			<dependency>
+    			<groupId>mysql</groupId>
+    			<artifactId>mysql-connector-java</artifactId>
+    			<version>${mysql.version}</version>
+			</dependency>
+			
 				
 		<!-- AspectJ -->
 		<dependency>

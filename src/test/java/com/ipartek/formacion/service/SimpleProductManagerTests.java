@@ -47,7 +47,7 @@ public class SimpleProductManagerTests {
 		product.setPrice(TABLE_PRICE);
 		this.products.add(product);
 
-		this.productManager.setProducts(this.products);
+		// this.productManager.setProducts(this.products);
 
 	}
 
@@ -86,7 +86,7 @@ public class SimpleProductManagerTests {
 	public void testIncreasePriceWithEmptyListOfProducts() {
 		try {
 			this.productManager = new SimpleProductManager();
-			this.productManager.setProducts(new ArrayList<Product>());
+			// this.productManager.setProducts(new ArrayList<Product>());
 			this.productManager.increasePrice(POSITIVE_PRICE_INCREASE);
 		} catch (final Exception ex) {
 			fail("Products list is empty.");
