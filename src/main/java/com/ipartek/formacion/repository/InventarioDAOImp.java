@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -30,20 +33,36 @@ public class InventarioDAOImp implements InventarioDAO {
 
 	@Autowired
 	private DataSource dataSource = null;
+
 	private JdbcTemplate jdbctemplate = null;
+	private SimpleJdbcCall jdbcCall;
 
 	@Autowired
 	@Override
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbctemplate = new JdbcTemplate(this.dataSource);
+		this.jdbcCall = new SimpleJdbcCall(this.dataSource);
 
 	}
 
 	@Override
 	public void increasePrice(int percentage) {
-		// TODO CallableStatement con procedimiento almacenado en BBDD
+		// CallableStatement con procedimiento almacenado en BBDD
+		logger.trace("Llamando rutina almacenada en Heidi 'incrementar_precio'");
+		jdbcCall.withProcedureName("incrementar_precio");
 
+		SqlParameterSource parameterIn = new MapSqlParameterSource().addValue("porcentaje", percentage);
+
+		this.jdbcCall.execute(parameterIn);
+
+		/*
+		 * Si tuvieramos parametros de salida 'out', ej: Map<String, Object> out
+		 * = jdbcCall.execute(in); out.get("nombre_parametro_salida");
+		 * 
+		 */
+
+		this.logger.info("Incrementados todos los productos un " + percentage + "%");
 	}
 
 	@Override
@@ -149,22 +168,10 @@ public class InventarioDAOImp implements InventarioDAO {
 
 	@Override
 	public boolean modificar(Product p) {
-		boolean resul = false;
-		int affectedRows = -1;
-
-		final String sqlModificar = "UPDATE `gss`.`products` SET price=" + p.getPrice() + ", description="
-				+ p.getDescription() + "  WHERE  id=" + p.getId();
-
-		affectedRows = this.jdbctemplate.update(new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
-				final PreparedStatement ps = conn.prepareStatement(sqlModificar);
-
-				return ps;
-			}
-		});
-
-		return true;
+		final String SQL = "UPDATE `products` SET `description`=? , `price`=? WHERE  `id`=?;";
+		Object[] arguments = { p.getDescription(), p.getPrice(), p.getId() };
+		int affectedRows = this.jdbctemplate.update(SQL, arguments);
+		return (affectedRows == 1) ? true : false;
 	}
 
 }

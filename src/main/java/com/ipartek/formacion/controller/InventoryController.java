@@ -69,21 +69,27 @@ public class InventoryController {
 	}
 
 	/* ** Crea el producto en la BBDD*** */
-	@RequestMapping(value = "/inventario/nuevo", method = RequestMethod.POST)
-	public ModelAndView crear(@Valid Product product, BindingResult bindingResult) {
-		this.logger.trace("Creando producto....");
+	@RequestMapping(value = "/inventario/save", method = RequestMethod.POST)
+	public ModelAndView salvar(@Valid Product product, BindingResult bindingResult) {
+		this.logger.trace("Salvando producto....");
 
 		if (bindingResult.hasErrors()) {
 			this.logger.warn("parametros no validos");
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("product", product);
+			return new ModelAndView("product/form", model);
 		} else {
-			this.productManager.insertar(product);
+
+			if (product.isNew()) {
+				this.productManager.insertar(product);
+			} else {
+				this.productManager.modificar(product);
+			}
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("product", product);
+			return new ModelAndView("product/form", model);
 		}
 
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("isNew", true);
-		// model.put("product", new Product());
-
-		return new ModelAndView("product/form", model);
 	}
 
 	/*
@@ -96,6 +102,7 @@ public class InventoryController {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		model.put("product", this.productManager.getById(id));
+		model.put("isNew", false);
 
 		return new ModelAndView("product/form", model);
 	}

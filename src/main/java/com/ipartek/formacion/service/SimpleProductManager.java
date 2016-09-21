@@ -25,14 +25,19 @@ public class SimpleProductManager implements ProductManager {
 			throw new IllegalArgumentException(MSG_ILLEGALARGUMENT_EXCEPTION);
 
 		} else {
-			if (this.products != null) {
-				for (final Product product : this.products) {
-					if (product != null) {
-						final double newPrice = product.getPrice().doubleValue() * (100 + percentage) / 100;
-						product.setPrice(newPrice);
-					}
-				}
-			}
+
+			/* Incrmenetando el precio uno a uno a mano */
+			/*
+			 * if (this.products != null) { for (final Product product :
+			 * this.products) { if (product != null) { final double newPrice =
+			 * product.getPrice().doubleValue() * (100 + percentage) / 100;
+			 * product.setPrice(newPrice); } } }
+			 */
+			/*
+			 * Haciendolo con una llamada al DAO e incrementando todos los
+			 * productos dela BBDD
+			 */
+			this.inventarioDAOImp.increasePrice(percentage);
 		}
 
 	}
@@ -60,8 +65,7 @@ public class SimpleProductManager implements ProductManager {
 
 	@Override
 	public boolean modificar(Product p) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.inventarioDAOImp.modificar(p);
 	}
 
 }
