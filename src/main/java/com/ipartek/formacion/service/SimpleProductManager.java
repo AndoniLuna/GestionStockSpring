@@ -25,16 +25,7 @@ public class SimpleProductManager implements ProductManager {
 			throw new IllegalArgumentException(MSG_ILLEGALARGUMENT_EXCEPTION);
 
 		} else {
-			if (this.products != null) {
-				for (final Product product : this.products) {
-					if (product != null) {
-						final double newPrice = product.getPrice().doubleValue() * (100 + percentage) / 100;
-						final long id = product.getId();
-						// product.setPrice(newPrice);
-						this.inventarioDAOImpl.increasePrice(newPrice, id);
-					}
-				}
-			}
+			this.inventarioDAOImpl.increasePrice(percentage);
 		}
 
 	}
@@ -62,7 +53,7 @@ public class SimpleProductManager implements ProductManager {
 
 	@Override
 	public boolean modificar(Product p) {
-		return this.inventarioDAOImpl.insertar(p);
+		return this.inventarioDAOImpl.modificar(p);
 	}
 
 }

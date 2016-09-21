@@ -22,12 +22,12 @@ public class Product implements Serializable {
 
 	public Product() {
 		super();
-		this.id = 0;
+		this.id = -1;
 		this.description = "";
 		this.price = 0.0;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return this.id;
 	}
 

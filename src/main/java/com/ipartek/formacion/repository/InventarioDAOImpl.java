@@ -14,12 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.ipartek.formacion.domain.Product;
 import com.ipartek.formacion.repository.mapper.ProductMapper;
+import com.mysql.jdbc.Statement;
 
 @Repository("inventoryDAOImpl")
 public class InventarioDAOImpl implements InventarioDAO {
@@ -29,20 +33,35 @@ public class InventarioDAOImpl implements InventarioDAO {
 
 	@Autowired
 	private DataSource dataSource;
+
 	private JdbcTemplate jdbcTemplate;
+	private SimpleJdbcCall jdbcCall;
 
 	@Autowired
 	@Override
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
+		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
+		this.jdbcCall = new SimpleJdbcCall(this.dataSource);
 	}
 
 	@Override
-	public void increasePrice(double newPrice, long id) {
-		final String SQL = "UPDATE products SET price = ? where id = ?";
-		this.jdbcTemplate.update(SQL, newPrice, id);
-		// CallableStatement con procedimiento almacenado en BBDD
+	public void increasePrice(int percentage) {
+		// final String SQL = "UPDATE products SET price = ? where id = ?";
+		// this.jdbcTemplate.update(SQL, newPrice, id);
+
+		this.jdbcCall.withProcedureName("incrementar_precio");
+		logger.trace("llamando rutina almacenada 'incrementar_precio'");
+
+		SqlParameterSource parameterIn = new MapSqlParameterSource().addValue("porcentaje", percentage);
+
+		this.jdbcCall.execute(parameterIn);
+		/*
+		 * Si tuvieramos parametros de salida 'out', ejemplo:
+		 * Map<String, Object> out = jdbcCall.execute(in);
+		 * out.get("nombre_parametro_salida");
+		 */
+		this.logger.info("Incrementado todos los productos un " + percentage + " %");
 	}
 
 	@Override
@@ -100,14 +119,13 @@ public class InventarioDAOImpl implements InventarioDAO {
 		int affectedRows = -1;
 
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
-		final String sqlInsert = "INSERT INTO `products` ( `id`, `description`, `price`) VALUES ( ? , ? , ? );";
+		final String sqlInsert = "INSERT INTO `products` (  `description`, `price`) VALUES (  ? , ? );";
 		affectedRows = this.jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
-				final PreparedStatement ps = conn.prepareStatement(sqlInsert);
-				ps.setLong(1, p.getId());
-				ps.setString(2, p.getDescription());
-				ps.setDouble(3, p.getPrice());
+				final PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, p.getDescription());
+				ps.setDouble(2, p.getPrice());
 				return ps;
 			}
 		}, keyHolder);

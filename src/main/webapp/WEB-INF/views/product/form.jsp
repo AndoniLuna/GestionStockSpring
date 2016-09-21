@@ -2,10 +2,10 @@
 
 <h1>Crear Producto</h1>
 
-<form:form action="nuevo" method="post" commandName="product">
+<form:form action="inventario/nuevo" method="post" commandName="product">
   
   <form:label path="id">id:</form:label>
-  <form:input path="id"/>
+  <form:input path="id" readonly="true"/>
   <form:errors path="id" cssClass="error"/>
   <br />
   

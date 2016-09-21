@@ -67,18 +67,54 @@ public class InventoryController {
 		return new ModelAndView("product/form", model);
 	}
 
-	@RequestMapping(value = "/inventario/nuevo/{product}", method = RequestMethod.POST)
+	/**
+	 * Alta/Modificacion del producto
+	 *
+	 * @param product
+	 * @param bindingResult
+	 * @return
+	 */
+	@RequestMapping(value = "/inventario/nuevo", method = RequestMethod.POST)
 	public ModelAndView crear(@Valid Product product, BindingResult bindingResult) {
-		this.logger.trace("Creando producto....");
-
-		if (bindingResult.hasErrors()) {
-			this.logger.warn("parametros no validos");
-		}
 
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("product", this.productManager.insertar(product));
 
-		return new ModelAndView("product/form", model);
+		if (product.getId() != -1) {
+			this.logger.trace("Modificando producto....");
+			String msg = "No se ha podido modificar el producto [" + product + "]";
+			if (bindingResult.hasErrors()) {
+				this.logger.warn("parametros no validos");
+				return new ModelAndView("product/form", model);
+			} else {
+				if (this.productManager.modificar(product)) {
+					msg = "El producto [" + product + "] ha sido modificado";
+					this.logger.info(msg);
+				} else {
+					this.logger.warn(msg);
+				}
+				model.put("products", this.productManager.getProducts());
+				model.put("fecha", new Date().toString());
+				return new ModelAndView("product/inventario", model);
+			}
+
+		} else {
+			this.logger.trace("Creando producto....");
+			String msg = "No se ha podido dar de alta al producto [" + product + "]";
+			if (bindingResult.hasErrors()) {
+				this.logger.warn("parametros no validos");
+				return new ModelAndView("product/form", model);
+			} else {
+				if (this.productManager.insertar(product)) {
+					msg = "producto [" + product + "] dado de alta";
+					this.logger.info(msg);
+				} else {
+					this.logger.warn(msg);
+				}
+				model.put("products", this.productManager.getProducts());
+				model.put("fecha", new Date().toString());
+				return new ModelAndView("product/inventario", model);
+			}
+		}
 	}
 
 	/**
@@ -120,26 +156,5 @@ public class InventoryController {
 		model.put("fecha", new Date().toString());
 
 		return new ModelAndView("product/inventario", model);
-	}
-
-	/**
-	 * Modificar el producto
-	 *
-	 * @param product
-	 * @param bindingResult
-	 * @return
-	 */
-	@RequestMapping(value = "/inventario/modificar", method = RequestMethod.POST)
-	public ModelAndView modificar(@Valid Product product, BindingResult bindingResult) {
-		this.logger.trace("Modificando producto...");
-
-		if (bindingResult.hasErrors()) {
-			this.logger.warn("Parametros no validos");
-		}
-
-		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put("product", new Product());
-
-		return new ModelAndView("product/form", model);
 	}
 }
