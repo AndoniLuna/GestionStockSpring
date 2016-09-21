@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,7 +28,7 @@ import com.ipartek.formacion.repository.mapper.ProductMapper;
 public class InventarioDAOImpl implements InventarioDAO {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(InventarioDAOImpl.class);
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private DataSource dataSource;
@@ -68,9 +68,9 @@ public class InventarioDAOImpl implements InventarioDAO {
 			lista = (ArrayList<Product>) this.jdbctemplate.query(SQL, new ProductMapper());
 
 		} catch (EmptyResultDataAccessException e) {
-			logger.warn("No existen productos todavia " + SQL);
+			this.logger.warn("No existen productos todavia " + SQL);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			this.logger.error(e.getMessage());
 		}
 
 		return lista;
@@ -86,10 +86,10 @@ public class InventarioDAOImpl implements InventarioDAO {
 			p = this.jdbctemplate.queryForObject(SQL, new ProductMapper());
 
 		} catch (EmptyResultDataAccessException e) {
-			logger.warn("No existen productos con ID=" + id);
+			this.logger.warn("No existen productos con ID=" + id);
 			p = null;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			this.logger.error(e.getMessage());
 			p = null;
 		}
 		return p;
