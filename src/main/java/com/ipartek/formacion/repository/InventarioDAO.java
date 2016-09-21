@@ -9,7 +9,7 @@ import com.ipartek.formacion.domain.Product;
 
 public interface InventarioDAO extends Serializable {
 
-	void increasePrice(long id, double newPrice);
+	void increasePrice(int percentage);
 
 	List<Product> getProducts();
 	

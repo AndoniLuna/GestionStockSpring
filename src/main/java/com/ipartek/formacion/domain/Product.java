@@ -50,10 +50,14 @@ public class Product implements Serializable {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+	
+	public boolean isNew(){
+		return (this.id==-1)?true:false;
+	}
 
 	@Override
 	public String toString() {
-		return "Product [description=" + this.description + ", price=" + this.price + "]";
+		return "Product [id=" + this.id + ", description=" + this.description + ", price=" + this.price + "]";
 	}
 
 }

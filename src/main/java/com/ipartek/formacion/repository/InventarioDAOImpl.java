@@ -9,12 +9,14 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -27,11 +29,10 @@ import com.ipartek.formacion.repository.mapper.ProductMapper;
 public class InventarioDAOImpl implements InventarioDAO {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(InventarioDAOImpl.class);
+	private final Log logger = LogFactory.getLog(this.getClass());
 
-	private JdbcTemplate jdbctemplate;
-	
-	private SimpleJdbcCall simpleJdbcCall;
+	private JdbcTemplate jdbctemplate;	
+	private SimpleJdbcCall jdbcCall;
 
 	@Autowired
 	private DataSource datasource;
@@ -41,13 +42,28 @@ public class InventarioDAOImpl implements InventarioDAO {
 	public void setDataSource(DataSource dataSource) {
 		this.datasource = dataSource;
 		this.jdbctemplate = new JdbcTemplate(this.datasource);
+		this.jdbcCall = new SimpleJdbcCall(this.datasource);
 	}
 
 	@Override
-	public void increasePrice(long id, double newPrice) {
-		// TODO CallableStatement con procedimiento almacenado en BBDD
-		final String SQL = "UPDATE products SET price = ? WHERE id = ?;";
-		this.jdbctemplate.update(SQL, newPrice, id);
+	public void increasePrice(int percentage) {
+		
+		this.logger.trace("Llamando rutina almacenada 'incrementar_precio'");
+		this.jdbcCall.withProcedureName("incrementar_precio");
+		
+		SqlParameterSource parameterIn =
+				new MapSqlParameterSource().addValue("porcentaje", percentage);
+		
+		this.jdbcCall.execute(parameterIn);
+				
+		/*
+		 * Si tuvieramos parametros de salida 'out':
+		 *	Map<String, Object> out = jdbcCall.execute(parameterIn);
+		 *	out.get("nombre_parametro_salida");
+		 *
+		 */
+		
+		this.logger.info("Incrementado todos los Productos un " + percentage + "%");
 	}
 
 	@Override
@@ -59,9 +75,9 @@ public class InventarioDAOImpl implements InventarioDAO {
 			lista = (ArrayList<Product>) this.jdbctemplate.query(SQL, new ProductMapper());
 
 		} catch (EmptyResultDataAccessException e) {
-			logger.warn("No existen productos todavia " + SQL);
+			this.logger.warn("No existen productos todavia " + SQL);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			this.logger.error(e.getMessage());
 		}
 
 		return lista;
@@ -77,10 +93,10 @@ public class InventarioDAOImpl implements InventarioDAO {
 			p = this.jdbctemplate.queryForObject(SQL, new ProductMapper());
 
 		} catch (EmptyResultDataAccessException e) {
-			logger.warn("No existe el producto con id " + id);
+			this.logger.warn("No existe el producto con id " + id);
 			p = null;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			this.logger.error(e.getMessage());
 			p = null;
 		}
 
@@ -123,18 +139,6 @@ public class InventarioDAOImpl implements InventarioDAO {
 		return resul;
 	}
 
-	@Override
-	public boolean modificar(Product p) {
-		boolean resul = false;
-		final String SQL = "UPDATE `products` SET `description`=?, `price`=? WHERE  `id`=?;";
-		final Object[] args = { p.getDescription(), p.getPrice(), p.getId() };
-		
-		if ( 1 == this.jdbctemplate.update(SQL, args)){
-			resul=true;
-		}
-		return resul;
-	}
-
 //	@Override
 //	public boolean modificar(Product p) {
 //		boolean resul = false;
@@ -146,6 +150,23 @@ public class InventarioDAOImpl implements InventarioDAO {
 //		}
 //		return resul;
 //	}
+
+	@Override
+	public boolean modificar(Product p) {
+		boolean resul = true;
+		
+		this.jdbcCall.withProcedureName("modificarProducto");
+		
+		SqlParameterSource parameterIn =
+				new MapSqlParameterSource().addValue("pDescription", p.getDescription()).addValue("pPrice", p.getPrice()).addValue("pId", p.getId());
+		
+		this.jdbcCall.execute(parameterIn);
+		
+//		if ( 1 == this.jdbctemplate.update(SQL, args)){
+//			resul=true;
+//		}
+		return resul;
+	}
 
 //	@Override
 //	public boolean modificar(Product p) {

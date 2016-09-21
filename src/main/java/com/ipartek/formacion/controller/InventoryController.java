@@ -62,52 +62,50 @@ public class InventoryController {
 		
 		final Map<String, Object> model = new HashMap<String, Object>();		
 		model.put("product", new Product());
+		model.put("isNew", true);
 		
 		return new ModelAndView("product/form", model);
 	}
 	
-	@RequestMapping(value = "/inventario/nuevo", method = RequestMethod.POST)
-	public ModelAndView crear(@Valid Product product, BindingResult bindingResult) {
+	@RequestMapping(value = "/inventario/save", method = RequestMethod.POST)
+	public ModelAndView guardar(@Valid Product product, BindingResult bindingResult) {
 		
 		final Map<String, Object> model = new HashMap<String, Object>();	
+		String vista = "product/inventario";
 		String msg = "No se pudo guardar el Producto";
 		
-		if(-1==product.getId() ){
-			//insert
-			this.logger.trace("Creando producto......");
-
+		this.logger.trace("Guardando producto......");
+		
+		if(bindingResult.hasErrors()) {
+			//error
+			this.logger.warn("Parametros no validos");
+			model.put("msg", msg);
+			model.put("product", product);
+			model.put("isNew", product.isNew());
+			vista = "product/form";
 			
-			if(bindingResult.hasErrors()) {
-				this.logger.warn("Parametros no validos");
-				model.put("msg", msg);
-				return new ModelAndView("product/form", model);
-			}else{
+		}else{
+			if(product.isNew()){
+				//insert				
 				if(this.productManager.insertar(product)){
 					msg = "Producto creado con éxito";
 					model.put("msg", msg);
-					this.logger.trace("msg");		
+					this.logger.trace(msg);		
 				}
-			}			
-		}else{
-			//modificar
-			this.logger.trace("Modificando producto......");
-			
-			if(bindingResult.hasErrors()) {
-				this.logger.warn("Parametros no validos");
-				model.put("msg", msg);
-				return new ModelAndView("product/form", model);
+				
 			}else{
+				//modificar				
 				if(this.productManager.modificar(product)){
 					msg = "Producto modificado con éxito";
 					model.put("msg", msg);
-					this.logger.trace("msg");		
+					this.logger.trace(msg);		
 				}
 			}
+			model.put("products", this.productManager.getProducts());
 		}
 		
-		model.put("products", this.productManager.getProducts());
 		
-		return new ModelAndView("product/inventario", model);				
+		return new ModelAndView(vista, model);				
 		
 	}
 	
@@ -117,7 +115,8 @@ public class InventoryController {
 				
 		final Map<String, Object> model = new HashMap<String, Object>();
 	
-		model.put("product", this.productManager.getById(id));		
+		model.put("product", this.productManager.getById(id));
+		model.put("isNew", false);
 		
 		return new ModelAndView("product/form", model);
 	}
