@@ -72,23 +72,25 @@ public class InventoryController {
 	@RequestMapping(value = "/inventario/save", method = RequestMethod.POST)
 	public ModelAndView salvar(@Valid Product product, BindingResult bindingResult) {
 		this.logger.trace("Salvando producto....");
+		Map<String, Object> model = new HashMap<String, Object>();
+		String view = "product/form";
 
 		if (bindingResult.hasErrors()) {
-			this.logger.warn("parametros no validos");
-			Map<String, Object> model = new HashMap<String, Object>();
+			this.logger.warn("Parametros no validos");
+			model.put("isNew", product.isNew());
 			model.put("product", product);
-			return new ModelAndView("product/form", model);
 		} else {
-
 			if (product.isNew()) {
 				this.productManager.insertar(product);
 			} else {
 				this.productManager.modificar(product);
 			}
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("product", product);
-			return new ModelAndView("product/form", model);
+			model.put("products", this.productManager.getProducts());
+			model.put("msg", "Prodcuto guardado con éxito");
+			view = "product/inventario";
+
 		}
+		return new ModelAndView(view, model);
 
 	}
 
@@ -141,7 +143,7 @@ public class InventoryController {
 		model.put("product", pDetalle);
 		model.put("isNew", false);
 
-		return new ModelAndView("product/form", model);
+		return new ModelAndView("product/inventario", model);
 	}
 
 }
